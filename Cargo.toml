@@ -1,0 +1,15 @@
+[package]
+name = "coingecko_watch"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+reqwest = { version = "0.11.13", features = ["json", "gzip"] }
+tokio = { version = "1.22.0", features = ["full"] }
+serde = { version = "1.0.147", features = ["derive"] }
+tracing = "0.1.37"
+tracing-subscriber = "0.3.16"
+serde_json = "1.0"
+
