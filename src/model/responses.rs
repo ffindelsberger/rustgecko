@@ -1,6 +1,5 @@
-use serde::de::DeserializeOwned;
+
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -23,84 +22,7 @@ struct CoinPriceSimple {}
 
 pub type SupportedVsCurrencies = Vec<String>;
 
-pub enum PriceChange {
-    Hours1,
-    Hours24,
-    Days7,
-    Days14,
-    Days30,
-    Days200,
-    Years1,
-}
-
-impl PriceChange {
-    pub fn get_string(&self) -> &str {
-        match self {
-            PriceChange::Hours1 => "1h",
-            PriceChange::Hours24 => "24h",
-            PriceChange::Days7 => "7d",
-            PriceChange::Days30 => "14d",
-            PriceChange::Days200 => "30d",
-            PriceChange::Years1 => "1y",
-            PriceChange::Days14 => "14d",
-        }
-    }
-}
-
-impl AsRef<str> for PriceChange {
-    fn as_ref(&self) -> &str {
-        self.get_string()
-    }
-}
-
-pub enum MarketOrder {
-    MarketCapDesc,
-    MarketCapAsc,
-    GeckoDesc,
-    GeckoAsc,
-    VolumeAsc,
-    VolumeDesc,
-    IdAsc,
-    IdDesc,
-}
-
-impl MarketOrder {
-    pub fn get_string(&self) -> &str {
-        match self {
-            MarketOrder::MarketCapDesc => "market_cap_desc",
-            MarketOrder::MarketCapAsc => "market_cap_asc",
-            MarketOrder::GeckoDesc => "gecko_desc",
-            MarketOrder::GeckoAsc => "gecko_asc",
-            MarketOrder::VolumeAsc => "volume_asc",
-            MarketOrder::VolumeDesc => "volume_desc",
-            MarketOrder::IdAsc => "id_asc",
-            MarketOrder::IdDesc => "id_desc",
-        }
-    }
-}
-
-impl AsRef<str> for MarketOrder {
-    fn as_ref(&self) -> &str {
-        self.get_string()
-    }
-}
-
-enum TrustOrders {
-    TrustScoreDesc,
-    TrustScoreAsc,
-    VolumeDesc,
-}
-
-impl TrustOrders {
-    fn get_string(&self) -> String {
-        match self {
-            TrustOrders::TrustScoreDesc => "trust_score_desc".into(),
-            TrustOrders::TrustScoreAsc => "trust_score_asc".into(),
-            TrustOrders::VolumeDesc => "volume_desc".into(),
-        }
-    }
-}
-
+//TODO: test this struct
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CoinsMarketItem {
     pub id: String,
@@ -109,8 +31,8 @@ pub struct CoinsMarketItem {
     pub image: String,
     pub current_price: Option<f64>,
     pub market_cap: Option<f64>,
-    pub market_cap_rank: Value,
-    pub fully_diluted_valuation: Value,
+    pub market_cap_rank: serde_json::Value,
+    pub fully_diluted_valuation: serde_json::Value,
     pub total_volume: Option<f64>,
     pub high_24h: Option<f64>,
     pub low_24h: Option<f64>,
@@ -147,6 +69,38 @@ pub struct RoiItem {
     pub times: f64,
     pub currency: String,
     pub percentage: f64,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Ticker {
+    pub base: String,
+    pub target: String,
+    pub market: Market,
+    pub last: f64,
+    pub volume: f64,
+    pub cost_to_move_up_usd: f64,
+    pub cost_to_move_down_usd: f64,
+    pub converted_last: HashMap<String, f64>,
+    pub converted_volume: HashMap<String, f64>,
+    pub trust_score: String,
+    pub bid_ask_spread_percentage: f64,
+    pub timestamp: String,
+    pub last_traded_at: String,
+    pub last_fetch_at: String,
+    pub is_anomaly: bool,
+    pub is_stale: bool,
+    pub trade_url: String,
+    pub token_info_url: Option<serde_json::Value>,
+    pub coin_id: String,
+    pub target_coin_id: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Market {
+    pub name: String,
+    pub identifier: String,
+    pub has_trading_incentive: bool,
+    pub logo: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
