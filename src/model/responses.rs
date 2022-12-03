@@ -1,4 +1,3 @@
-
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -101,6 +100,14 @@ pub struct Market {
     pub identifier: String,
     pub has_trading_incentive: bool,
     pub logo: String,
+}
+
+/// Modles the MarketChart Data as Arrays of Tuples (unix_timestamp, value)
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MarketChart {
+    prices: Vec<(i64, f64)>,
+    market_caps: Vec<(i64, f64)>,
+    total_volumes: Vec<(i64, f64)>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

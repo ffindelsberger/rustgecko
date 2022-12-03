@@ -1,13 +1,13 @@
 use crate::model::queryparams::{MarketOrder, PriceChange, TrustOrder};
-use crate::model::responses::{CoinListing, CoinsMarketItem, Price, Ticker};
-use reqwest::{header};
+use crate::model::responses::{CoinListing, CoinsMarketItem, MarketChart, Price, Ticker};
+use reqwest::header;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use std::collections::HashMap;
 use time::format_description::FormatItem;
 use time::macros::format_description;
-use time::{Date};
-use tracing::info;
+use time::Date;
+use tracing::{debug, info, trace};
 
 pub const COINGECKO_DATE_FORMAT: &[FormatItem<'_>] = format_description!("[day]-[month]-[year]");
 
@@ -57,9 +57,12 @@ impl GeckoClient {
     /// Creates a new GeckoClient with the supplied httpclient,
     /// use this if you need to specify an Api Access Key in the Requests.
     /// Set the Key as a default header in the Client
-    /// usefull if you want to specify a custom retry or timeout behavior
+    /// usefull also if you want to specify a custom retry or timeout behavior
     ///
     /// String or &str is the real question
+    /// # Examples
+    ///
+    ///
     fn new_with_custome_client(http_client: reqwest::Client, api_url: &'static str) -> GeckoClient {
         return GeckoClient {
             client: http_client,
@@ -80,12 +83,18 @@ impl GeckoClient {
         if let Some(params) = query_params {
             req_builder = req_builder.query(params);
         }
-
         let request = req_builder.build().expect("error building request");
-        info!("Calling CoinGecko with url: {}", request.url());
-        let response = self.client.execute(request).await?.json::<D>().await?;
 
-        Ok(response)
+        debug!("Calling CoinGecko API with url: {}", request.url());
+        let response = self.client.execute(request).await?;
+
+        if let Err(error) = response.error_for_status_ref() {
+            //TODO: Change to debug
+            info!("{}", response.text().await?);
+            return Err(error);
+        };
+
+        return response.json().await;
     }
 
     /// Calls the simple/supported_vs_currencies endpoint
@@ -108,7 +117,7 @@ impl GeckoClient {
     /// # Examples
     ///
     /// ```rust
-    /// let client = geckoClient::new("https://some.url");
+    /// let client = geckoClient::default();
     /// client.simple_price(&["1032"], &["usd","eur"]);
     /// ```
     pub async fn simple_price(
@@ -261,8 +270,24 @@ impl GeckoClient {
             .await;
     }
 
-    pub fn coins_marketchart() {
-        todo!();
+    pub async fn coins_marketchart(
+        &self,
+        id: &str,
+        vs_currencies: &str,
+        days: &str,
+        interval: Option<&str>,
+    ) -> Result<MarketChart, reqwest::Error> {
+        let url = format!("/coins/{}/market_chart", id);
+        let mut params: Vec<(&str, String)> = vec![
+            ("vs_currency", vs_currencies.to_string()),
+            ("days", days.to_string()),
+        ];
+
+        if let Some(interval) = interval {
+            params.push(("interval", interval.to_string()));
+        }
+
+        return self.send_gecko_request(&url, Some(&params)).await;
     }
 
     pub fn coins_marketchart_range() {
