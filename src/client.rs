@@ -1,5 +1,5 @@
-use crate::model::queryparams::{MarketOrder, PriceChange, TrustOrder};
-use crate::model::responses::{CoinListing, CoinsMarketItem, MarketChart, Price, Ticker};
+use crate::model::queryparams::*;
+use crate::model::responses::*;
 use reqwest::header;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use time::format_description::FormatItem;
 use time::macros::format_description;
 use time::Date;
-use tracing::{debug, info, trace};
+use tracing::{debug, info};
 
 pub const COINGECKO_DATE_FORMAT: &[FormatItem<'_>] = format_description!("[day]-[month]-[year]");
 
@@ -63,7 +63,10 @@ impl GeckoClient {
     /// # Examples
     ///
     ///
-    fn new_with_custome_client(http_client: reqwest::Client, api_url: &'static str) -> GeckoClient {
+    pub fn new_with_custome_client(
+        http_client: reqwest::Client,
+        api_url: &'static str,
+    ) -> GeckoClient {
         return GeckoClient {
             client: http_client,
             api_location: api_url,
@@ -349,6 +352,7 @@ impl GeckoClient {
     pub fn indexes() {
         todo!();
     }
+
     pub fn indexes_list() {
         todo!();
     }

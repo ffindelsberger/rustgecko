@@ -1,7 +1,4 @@
-mod geckoclient;
-mod model;
-
-use crate::geckoclient::GeckoClient;
+use coingecko_watch::client::GeckoClient;
 use time::macros::date;
 use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
