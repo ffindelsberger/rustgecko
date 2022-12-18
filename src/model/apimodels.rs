@@ -258,7 +258,7 @@ pub struct CommunityData {
     pub reddit_average_posts_48h: Option<f64>,
     pub reddit_average_comments_48h: Option<f64>,
     pub reddit_subscribers: Option<i64>,
-    pub reddit_accounts_active_48h: Option<Option<String>>,
+    pub reddit_accounts_active_48h: serde_json::Value,
     pub telegram_channel_user_count: Option<Option<i64>>,
 }
 
