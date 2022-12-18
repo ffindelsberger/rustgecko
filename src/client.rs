@@ -6,7 +6,6 @@ use reqwest::header;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use std::collections::HashMap;
-use std::fmt::format;
 use time::format_description::FormatItem;
 use time::macros::format_description;
 use time::Date;
@@ -30,7 +29,7 @@ impl GeckoClient {
     /// # Examples
     ///
     /// ```rust
-    /// use coingecko_watch::client::*;
+    /// use rustgecko::client::GeckoClient;
     /// let client = GeckoClient::new("https://some.url");
     /// ```
     pub fn new(api_url: &'static str) -> GeckoClient {
