@@ -35,7 +35,7 @@ mod test {
         let list = client.coins_list().await.unwrap();
 
         for i in 1..list.len() {
-            thread::sleep(Duration::from_secs(3));
+            thread::sleep(Duration::from_secs(5));
             let id = &list.get(i).unwrap().id;
             if let Err(error) = client.coins(id, true, true, true, true, true, true).await {
                 println!("{}", error);
@@ -71,7 +71,7 @@ mod test {
                 break;
             };
             page += 1;
-            thread::sleep(Duration::from_secs(3));
+            thread::sleep(Duration::from_secs(5));
         }
     }
 
