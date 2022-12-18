@@ -20,6 +20,7 @@ mod test {
     }
 
     #[tokio::test]
+    #[serial]
     async fn coins_list() {
         init();
         let client = GeckoClient::default();
@@ -75,6 +76,7 @@ mod test {
     }
 
     #[tokio::test]
+    #[serial]
     async fn coins_history() {
         init();
         let client = GeckoClient::default();
@@ -85,6 +87,7 @@ mod test {
     }
 
     #[tokio::test]
+    #[serial]
     async fn coins_market_chart() {
         init();
         let client = GeckoClient::default();
@@ -95,6 +98,7 @@ mod test {
     }
 
     #[tokio::test]
+    #[serial]
     async fn asset_platforms() {
         init();
         let client = GeckoClient::default();
@@ -102,6 +106,7 @@ mod test {
     }
 
     #[tokio::test]
+    #[serial]
     async fn exchange_rates() {
         init();
         let client = GeckoClient::default();
@@ -109,6 +114,7 @@ mod test {
     }
 
     #[tokio::test]
+    #[serial]
     async fn global() {
         init();
         let client = GeckoClient::default();
