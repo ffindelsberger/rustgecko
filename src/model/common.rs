@@ -11,7 +11,7 @@ pub type Description = HashMap<String, Option<String>>;
 pub struct LinksItem {
     pub homepage: Vec<Option<String>>,
     pub blockchain_site: Vec<Option<String>>,
-    pub official_forum_url: Vec<String>,
+    pub official_forum_url: Vec<Option<String>>,
     pub chat_url: Vec<Option<String>>,
     pub announcement_url: Vec<Option<String>>,
     pub twitter_screen_name: serde_json::Value,
@@ -24,8 +24,8 @@ pub struct LinksItem {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ReposUrl {
-    pub github: Vec<String>,
-    pub bitbucket: Vec<serde_json::Value>,
+    pub github: Vec<Option<String>>,
+    pub bitbucket: Vec<Option<String>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
