@@ -1,13 +1,6 @@
-use crate::model::common::{AllCurrencies, Description, ImageItem, LinksItem, Localization};
+use crate::model::common::*;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct BasicCoinInfo {
-    pub id: String,
-    pub symbol: String,
-    pub name: String,
-}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Ping {
@@ -23,53 +16,6 @@ pub struct CoinListing {
     pub symbol: String,
     pub name: String,
     pub platforms: Option<HashMap<String, Option<String>>>,
-}
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Ath {
-    ath: AllCurrencies,
-}
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct AthChangePercentage {
-    ath_change_percentage: AllCurrencies,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct AthDate {
-    ath_date: HashMap<String, String>,
-}
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Atl {
-    atl: AllCurrencies,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct AtlChangePercentage {
-    atl_change_percentage: AllCurrencies,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct AtlDate {
-    atl_date: HashMap<String, String>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct FullyDilutedValuation {
-    fully_diluted_valuation: AllCurrencies,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct High24H {
-    high_24h: AllCurrencies,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Low24H {
-    low_24h: AllCurrencies,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct PriceChange24HInCurrency {
-    price_change_24h_in_currency: AllCurrencies,
 }
 
 //TODO: test this struct
@@ -168,11 +114,11 @@ pub struct CoinsItem {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StatusUpdateItem {
-    description: String,
-    category: String,
-    created_at: String,
-    user: String,
-    user_title: String,
+    description: Option<String>,
+    category: Option<String>,
+    created_at: Option<String>,
+    user: Option<String>,
+    user_title: Option<String>,
     pin: bool,
     project: Project,
 }
@@ -180,7 +126,7 @@ pub struct StatusUpdateItem {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Project {
     #[serde(flatten)]
-    basinfo: BasicCoinInfo,
+    basic_info: BasicCoinInfo,
     #[serde(rename = "type")]
     project_type: String,
     image: ImageItem,
@@ -269,9 +215,9 @@ pub struct Sparkline7days {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct RoiItem {
-    pub times: f64,
+    pub times: Option<f64>,
     pub currency: String,
-    pub percentage: f64,
+    pub percentage: Option<f64>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

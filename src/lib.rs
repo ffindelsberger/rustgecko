@@ -10,6 +10,7 @@ pub mod model;
 mod test {
     use crate::client::GeckoClient;
     use crate::model::queryparams::{MarketOrder, PriceChange};
+    use serial_test::serial;
     use std::thread;
     use std::time::Duration;
     use time::macros::date;
@@ -26,6 +27,7 @@ mod test {
     }
 
     #[tokio::test]
+    #[serial]
     async fn coins_id() {
         init();
         let client = GeckoClient::default();
@@ -42,22 +44,34 @@ mod test {
     }
 
     #[tokio::test]
+    #[serial]
     async fn coins_market() {
         init();
         let client = GeckoClient::default();
         let bitcoin = client.coins_short("bitcoin").await.unwrap();
         let price_changes = [PriceChange::Days7, PriceChange::Years1, PriceChange::Days30];
-        let _ = client
-            .coins_markets(
-                "usd",
-                None,
-                MarketOrder::MarketCapDesc,
-                Some(&price_changes),
-                true,
-                None,
-            )
-            .await
-            .unwrap();
+
+        let mut response;
+        let mut page = 0;
+        loop {
+            response = client
+                .coins_markets(
+                    "usd",
+                    None,
+                    MarketOrder::MarketCapDesc,
+                    Some(&price_changes),
+                    true,
+                    Some(page),
+                )
+                .await
+                .unwrap();
+
+            if response.is_empty() {
+                break;
+            };
+            page += 1;
+            thread::sleep(Duration::from_secs(3));
+        }
     }
 
     #[tokio::test]

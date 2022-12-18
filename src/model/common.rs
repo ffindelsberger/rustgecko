@@ -34,3 +34,58 @@ pub struct ImageItem {
     pub small: Option<String>,
     pub large: Option<String>,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct BasicCoinInfo {
+    pub id: String,
+    pub symbol: String,
+    pub name: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Ath {
+    ath: AllCurrencies,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct AthChangePercentage {
+    ath_change_percentage: AllCurrencies,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct AthDate {
+    ath_date: HashMap<String, String>,
+}
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Atl {
+    atl: AllCurrencies,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct AtlChangePercentage {
+    atl_change_percentage: AllCurrencies,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct AtlDate {
+    atl_date: HashMap<String, String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct FullyDilutedValuation {
+    fully_diluted_valuation: AllCurrencies,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct High24H {
+    high_24h: AllCurrencies,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Low24H {
+    low_24h: AllCurrencies,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct PriceChange24HInCurrency {
+    price_change_24h_in_currency: AllCurrencies,
+}

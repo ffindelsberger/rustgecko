@@ -121,7 +121,7 @@ impl GeckoClient {
     /// # Examples
     ///
     /// ```rust
-    /// use coingecko_watch::client::GeckoClient;
+    /// use rustgecko::client::GeckoClient;
     /// let client = GeckoClient::new("https://some.url");
     /// client.simple_supportedvscurrencies();
     /// ```
@@ -136,7 +136,7 @@ impl GeckoClient {
     /// # Examples
     ///
     /// ```rust
-    /// use coingecko_watch::client::GeckoClient;
+    /// use rustgecko::client::GeckoClient;
     /// let client = GeckoClient::default();
     /// client.simple_price(&["1032"], &["usd","eur"], true, true, true ,true, "max");
     /// ```
