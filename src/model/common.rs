@@ -9,7 +9,7 @@ pub type Description = HashMap<String, Option<String>>;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct LinksItem {
-    pub homepage: Vec<String>,
+    pub homepage: Vec<Option<String>>,
     pub blockchain_site: Vec<Option<String>>,
     pub official_forum_url: Vec<String>,
     pub chat_url: Vec<Option<String>>,

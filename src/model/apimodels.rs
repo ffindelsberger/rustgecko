@@ -60,19 +60,19 @@ pub struct CoinsMarketItem {
 pub struct CoinHistoryItem {
     #[serde(flatten)]
     pub basic_info: BasicCoinInfo,
-    localization: Localization,
-    image: ImageItem,
-    market_data: BasicMarketData,
-    community_data: CommunityData,
-    developer_data: DeveloperData,
-    public_interest_stats: PublicInterestStats,
+    pub localization: Localization,
+    pub image: ImageItem,
+    pub market_data: BasicMarketData,
+    pub community_data: CommunityData,
+    pub developer_data: DeveloperData,
+    pub public_interest_stats: PublicInterestStats,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BasicMarketData {
-    current_price: AllCurrencies,
-    market_cap: AllCurrencies,
-    total_volume: AllCurrencies,
+    pub current_price: AllCurrencies,
+    pub market_cap: AllCurrencies,
+    pub total_volume: AllCurrencies,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -323,7 +323,7 @@ pub struct ExchangeRateItem {
     unit: String,
     value: f64,
     #[serde(rename = "type")]
-    exchange_type: String,
+    exchange_type: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
