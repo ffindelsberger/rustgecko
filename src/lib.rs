@@ -44,8 +44,6 @@ mod test {
         }
     }
 
-    #[tokio::test]
-    #[serial]
     async fn coins_market() {
         init();
         let client = GeckoClient::default();
