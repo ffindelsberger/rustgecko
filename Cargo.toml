@@ -9,8 +9,12 @@ edition = "2021"
 reqwest = { version = "0.11.13", features = ["json", "gzip"] }
 tokio = { version = "1.22.0", features = ["full"] }
 serde = { version = "1.0.147", features = ["derive"] }
-tracing = "0.1.37"
-tracing-subscriber = "0.3.16"
 serde_json = "1.0"
-time = { version = "0.3", features = ["macros", "formatting", "parsing"] }
+time = { version = "0.3", features = ["macros", "formatting"] }
+serde_path_to_error = "0.1.8"
+log = "0.4.0"
+env_logger = "0.9.0"
+
+[dev-dependencies]
+futures = "0.3.25"
 
