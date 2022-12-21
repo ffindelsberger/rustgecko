@@ -6,6 +6,11 @@ license = "MIT OR Apache-2.0"
 description = "A Simple SDK for Coingecko API"
 repository = "https://github.com/ffindelsberger/rustgecko"
 readme = "README.md"
+include = [
+    "**/*.rs",
+    "Cargo.toml",
+]
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -21,4 +26,5 @@ env_logger = "0.9.0"
 
 [dev-dependencies]
 serial_test = "0.9.0"
+
 
