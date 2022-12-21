@@ -27,8 +27,6 @@ mod test {
         let _ = client.coins_list().await.unwrap();
     }
 
-    #[tokio::test]
-    #[serial]
     async fn coins_market() {
         init();
         let client = GeckoClient::default();
@@ -58,8 +56,6 @@ mod test {
         }
     }
 
-    #[tokio::test]
-    #[serial]
     async fn coins_id() {
         init();
         let client = GeckoClient::default();
