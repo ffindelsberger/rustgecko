@@ -14,7 +14,7 @@ pub const COINGECKO_DATE_FORMAT: &[FormatItem<'_>] = format_description!("[day]-
 
 pub struct GeckoClient {
     client: reqwest::Client,
-    api_location: &'static str,
+    api_url: &'static str,
 }
 
 impl Default for GeckoClient {
@@ -51,7 +51,7 @@ impl GeckoClient {
 
         GeckoClient {
             client: cl,
-            api_location: api_url,
+            api_url,
         }
     }
 
@@ -64,14 +64,8 @@ impl GeckoClient {
     /// # Examples
     ///
     ///
-    pub fn new_with_custom_client(
-        http_client: reqwest::Client,
-        api_url: &'static str,
-    ) -> GeckoClient {
-        GeckoClient {
-            client: http_client,
-            api_location: api_url,
-        }
+    pub fn new_with_custom_client(client: reqwest::Client, api_url: &'static str) -> GeckoClient {
+        GeckoClient { client, api_url }
     }
 
     async fn send_gecko_request<T: Serialize + ?Sized, D: DeserializeOwned>(
@@ -79,7 +73,7 @@ impl GeckoClient {
         endpoint: &str,
         query_params: Option<&T>,
     ) -> Result<D, reqwest::Error> {
-        let url = format!("{}{}", self.api_location, endpoint);
+        let url = format!("{}{}", self.api_url, endpoint);
 
         //TODO: handle reqwest::Error like no connection or some shit somewhere, this here is just temporary
         let mut req_builder = self.client.get(url);
@@ -92,12 +86,10 @@ impl GeckoClient {
         debug!("Calling CoinGecko API with url: {}", request.url());
         let response = self.client.execute(request).await?;
 
-        //TODO: remove this logging before release;
-
         //Handle 4XX Status Codes
         if let Err(error) = response.error_for_status_ref() {
             //TODO: Change to debug
-            info!("{}", response.text().await?);
+            debug!("{}", response.text().await?);
             return Err(error);
         };
 
@@ -127,6 +119,15 @@ impl GeckoClient {
     /// ```
     pub async fn simple_supportedvscurrencies(&self) -> Result<Vec<String>, reqwest::Error> {
         self.send_gecko_request("/simple/supported_vs_currencies", None::<&[()]>)
+            .await
+    }
+
+    pub async fn simple_price_short(
+        &self,
+        ids: &[&str],
+        vs_currencies: &[&str],
+    ) -> Result<HashMap<String, Price>, reqwest::Error> {
+        self.simple_price(ids, vs_currencies, true, true, true, true, "max")
             .await
     }
 
@@ -168,7 +169,7 @@ impl GeckoClient {
         .await
     }
 
-    pub async fn simple_tokenprice(
+    async fn simple_tokenprice(
         &self,
         id: &str,
         vs_currencies: &[&str],
@@ -235,8 +236,11 @@ impl GeckoClient {
         }
 
         if let Some(price_change) = price_change_percentage {
-            let tmp = price_change.iter().map(|ele| ele.get_string()).collect();
-            params.push(("price_change", tmp));
+            let tmp = price_change
+                .iter()
+                .map(|ele| ele.to_string())
+                .collect::<Vec<_>>();
+            params.push(("price_change", tmp.join(",")));
         }
 
         if let Some(page) = page {
@@ -282,7 +286,7 @@ impl GeckoClient {
         self.send_gecko_request(&url, Some(&params)).await
     }
 
-    pub async fn coins_tickers(
+    async fn coins_tickers(
         &self,
         id: &str,
         exchange_ids: Option<&[&str]>,
@@ -335,7 +339,7 @@ impl GeckoClient {
     /// * `vs_currencies` - The target currency of market data (usd, eur, jpy, etc.)
     /// * `days` - Data up to number of days ago (eg. 1,14,30,max)
     /// * `interval` - Data interval. Possible value: daily
-    pub async fn coins_marketchart(
+    pub(crate) async fn coins_marketchart(
         &self,
         id: &str,
         vs_currencies: &str,
@@ -353,7 +357,7 @@ impl GeckoClient {
     }
 
     //TODO: test this endpoint
-    pub async fn coins_marketchart_range(
+    async fn coins_marketchart_range(
         &self,
         id: impl Into<String>,
         vs_currency: impl Into<String>,
@@ -375,7 +379,7 @@ impl GeckoClient {
     /// * `vs_currency` - The target currency of market data (usd, eur, jpy, etc.)
     /// * `days` - Data up to number of days ago (1/7/14/30/90/180/365/max)
     ///
-    pub async fn coins_ohlc(
+    async fn coins_ohlc(
         &self,
         id: &str,
         vs_currency: &str,
@@ -405,7 +409,7 @@ impl GeckoClient {
     ///
     /// # Arguments
     /// * `filter` - apply relevant filters to results. Valid values: "nft" (asset_platform nft-support)
-    pub async fn assetplatforms(
+    pub(crate) async fn assetplatforms(
         &self,
         filter: Option<&str>,
     ) -> Result<Vec<AssetPlatform>, reqwest::Error> {
@@ -486,7 +490,7 @@ impl GeckoClient {
     pub async fn exchangerates(&self) -> Result<ExchangeRates, reqwest::Error> {
         let url = "/exchange_rates";
 
-        self.send_gecko_request(url, None::<&(&str, &str)>).await
+        self.send_gecko_request(url, None::<&[()]>).await
     }
 
     fn search() {
@@ -500,7 +504,7 @@ impl GeckoClient {
     ///Get cryptocurrency global data
     pub async fn global(&self) -> Result<GlobalData, reqwest::Error> {
         let url = "/global";
-        self.send_gecko_request(url, None::<&(&str, &str)>).await
+        self.send_gecko_request(url, None::<&[()]>).await
     }
 
     fn global_defi() {

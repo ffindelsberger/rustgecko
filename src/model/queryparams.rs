@@ -1,5 +1,5 @@
 use std::fmt;
-use std::fmt::Formatter;
+use std::fmt::{Display, Formatter};
 
 pub enum TrustOrder {
     TrustScoreDesc,
@@ -83,16 +83,16 @@ pub enum PriceChange {
     Years1,
 }
 
-impl PriceChange {
-    pub fn get_string(&self) -> &str {
+impl Display for PriceChange {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
-            PriceChange::Hours1 => "1h",
-            PriceChange::Hours24 => "24h",
-            PriceChange::Days7 => "7d",
-            PriceChange::Days30 => "14d",
-            PriceChange::Days200 => "30d",
-            PriceChange::Years1 => "1y",
-            PriceChange::Days14 => "14d",
+            PriceChange::Hours1 => write!(f, "1h"),
+            PriceChange::Hours24 => write!(f, "24h"),
+            PriceChange::Days7 => write!(f, "7d"),
+            PriceChange::Days14 => write!(f, "14d"),
+            PriceChange::Days30 => write!(f, "30d"),
+            PriceChange::Days200 => write!(f, "30d"),
+            PriceChange::Years1 => write!(f, "1y"),
         }
     }
 }
@@ -135,7 +135,7 @@ pub enum PriceChangePercentage {
     OneYear,
 }
 
-impl fmt::Display for PriceChangePercentage {
+impl Display for PriceChangePercentage {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         todo!()
     }
@@ -147,7 +147,7 @@ pub enum TickerOrder {
     VolumeDesc,
 }
 
-impl fmt::Display for TickerOrder {
+impl Display for TickerOrder {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             TickerOrder::TrustScoreAsc => write!(f, "trust_score_asc"),
@@ -167,7 +167,7 @@ pub enum OhlcDays {
     ThreeHundredSixtyFiveDays,
 }
 
-impl fmt::Display for OhlcDays {
+impl Display for OhlcDays {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         todo!()
     }

@@ -1,18 +1,22 @@
+use log::LevelFilter;
 use rustgecko::client::GeckoClient;
-use std::thread;
-use std::time::Duration;
+use rustgecko::model::queryparams::{MarketOrder, PriceChange};
 
 #[tokio::main]
 async fn main() {
+    let _ = env_logger::builder()
+        .filter_level(LevelFilter::Debug)
+        .try_init();
     let client = GeckoClient::default();
-    let list = client.coins_list().await.unwrap();
-
-    for i in 1..list.len() {
-        thread::sleep(Duration::from_secs(5));
-        let id = &list.get(i).unwrap().id;
-        if let Err(error) = client.coins(id, true, true, true, true, true, true).await {
-            println!("{}", error);
-            break;
-        }
-    }
+    let _ = client
+        .coins_markets(
+            "usd",
+            None,
+            MarketOrder::MarketCapDesc,
+            Some(&[PriceChange::Days7, PriceChange::Years1, PriceChange::Days30]),
+            true,
+            Some(1),
+        )
+        .await
+        .unwrap();
 }
