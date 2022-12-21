@@ -22,11 +22,11 @@ Simple API Client for CoinGecko written in Rust
 |    /coins/{id}/market_chart     | &check; | &check; |        CoinsIDMarketChart        |
 |        /events/countries        |   WIP   |   WIP   |         EventsCountries          |
 |          /events/types          |   WIP   |   WIP   |            EventsType            |
-|         /exchange_rates         |   WIP   |   WIP   |           ExchangeRate           |
-|             /global             |   WIP   |   WIP   |              Global              |
+|         /exchange_rates         | &check; | &check; |           ExchangeRate           |
+|             /global             | &check; | &check; |              Global              |
 
-More api Endpoints than listed here will be supported in the Future. As soon as i start working on additional Endpoints
-the Table will be upated.
+More api Endpoints than listed here will be supported in the Future. As soon as I start working on additional Endpoints
+the Table will be updated.
 
 ## Shortcut Methods
 
