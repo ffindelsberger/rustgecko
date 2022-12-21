@@ -62,7 +62,7 @@ fn main() {
         .default_headers(headers)
         .build()?;
 
-    let _ = CoinGecko::new_with_custome_client(my_client);
+    let _ = CoinGecko::new_with_custome_client(client);
 }
 ```
 
