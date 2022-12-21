@@ -39,7 +39,7 @@ retrieve Some Data and leave the Rest of the Params as their Default.
 use rustgecko::client::GeckoClient;
 
 fn main() {
-    let client = CoinGecko::default();
+    let client = GeckoClient::default();
 }
 ```
 
@@ -62,7 +62,7 @@ fn main() {
         .default_headers(headers)
         .build()?;
 
-    let _ = CoinGecko::new_with_custome_client(client);
+    let _ = GeckoClient::new_with_custome_client(client);
 }
 ```
 
