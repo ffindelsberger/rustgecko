@@ -14,7 +14,8 @@ pub const COINGECKO_DATE_FORMAT: &[FormatItem<'_>] = format_description!("[day]-
 
 pub struct GeckoClient {
     client: reqwest::Client,
-    api_url: &'static str,
+    //TODO: maybe make this Owned String so the memory is not alive for the whole duration of the Application
+    api_url: String,
 }
 
 impl Default for GeckoClient {
@@ -32,7 +33,7 @@ impl GeckoClient {
     /// use rustgecko::client::GeckoClient;
     /// let client = GeckoClient::new("https://some.url");
     /// ```
-    pub fn new(api_url: &'static str) -> GeckoClient {
+    pub fn new(api_url: impl Into<String>) -> GeckoClient {
         let cl = {
             let mut headers = header::HeaderMap::new();
             headers.insert(
@@ -46,6 +47,8 @@ impl GeckoClient {
                 .build()
                 .expect("Error when building Coinmarketcap Api Client")
         };
+
+        let api_url = api_url.into();
 
         if api_url.ends_with('/') {}
 
@@ -64,8 +67,14 @@ impl GeckoClient {
     /// # Examples
     ///
     ///
-    pub fn new_with_custom_client(client: reqwest::Client, api_url: &'static str) -> GeckoClient {
-        GeckoClient { client, api_url }
+    pub fn new_with_custom_client(
+        client: reqwest::Client,
+        api_url: impl Into<String>,
+    ) -> GeckoClient {
+        GeckoClient {
+            client,
+            api_url: api_url.into(),
+        }
     }
 
     async fn send_gecko_request<T: Serialize + ?Sized, D: DeserializeOwned>(
@@ -75,7 +84,6 @@ impl GeckoClient {
     ) -> Result<D, reqwest::Error> {
         let url = format!("{}{}", self.api_url, endpoint);
 
-        //TODO: handle reqwest::Error like no connection or some shit somewhere, this here is just temporary
         let mut req_builder = self.client.get(url);
 
         if let Some(params) = query_params {
@@ -88,7 +96,6 @@ impl GeckoClient {
 
         //Handle 4XX Status Codes
         if let Err(error) = response.error_for_status_ref() {
-            //TODO: Change to debug
             debug!("{}", response.text().await?);
             return Err(error);
         };
@@ -239,8 +246,9 @@ impl GeckoClient {
             let tmp = price_change
                 .iter()
                 .map(|ele| ele.to_string())
-                .collect::<Vec<_>>();
-            params.push(("price_change", tmp.join(",")));
+                .collect::<Vec<_>>()
+                .join(",");
+            params.push(("price_change", tmp));
         }
 
         if let Some(page) = page {
