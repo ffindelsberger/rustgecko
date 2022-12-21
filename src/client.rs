@@ -1,7 +1,7 @@
 use crate::model::apimodels::*;
 use crate::model::common::Price;
 use crate::model::queryparams::*;
-use log::{debug, info};
+use log::debug;
 use reqwest::header;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
