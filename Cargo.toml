@@ -1,5 +1,5 @@
 [package]
-authors = "Florian Findelsberger"
+authors = ["Florian Findelsberger"]
 name = "rustgecko"
 version = "0.1.0-BETA"
 edition = "2021"
