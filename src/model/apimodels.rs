@@ -2,22 +2,6 @@ use crate::model::common::*;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Ping {
-    pub gecko_says: String,
-}
-
-///
-/// The Symbol is provided in lowercase letters
-///
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct CoinListing {
-    pub id: String,
-    pub symbol: String,
-    pub name: String,
-    pub platforms: Option<HashMap<String, Option<String>>>,
-}
-
 //TODO: test this struct
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CoinsMarketItem {
@@ -76,43 +60,6 @@ pub struct BasicMarketData {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct CoinsItem {
-    pub id: String,
-    pub symbol: String,
-    pub name: String,
-    pub asset_platform_id: Option<String>,
-    pub platforms: Option<HashMap<String, Option<String>>>,
-    pub block_time_in_minutes: f64,
-    pub hashing_algorithm: Option<String>,
-    pub categories: Vec<String>,
-    pub public_notice: Option<String>,
-    pub additional_notices: Vec<String>,
-    pub localization: Option<Localization>,
-    pub description: Description,
-    pub links: LinksItem,
-    pub image: ImageItem,
-    pub country_origin: Option<String>,
-    pub genesis_date: Option<String>,
-    pub contract_address: Option<String>,
-    pub sentiment_votes_up_percentage: Option<f32>,
-    pub sentiment_votes_down_percentage: Option<f32>,
-    pub market_cap_rank: Option<i32>,
-    pub coingecko_rank: Option<f32>,
-    pub coingecko_score: Option<f32>,
-    pub developer_score: Option<f32>,
-    pub community_score: Option<f32>,
-    pub liquidity_score: Option<f32>,
-    pub public_interest_score: Option<f32>,
-    pub market_data: Option<MarketData>,
-    pub community_data: Option<CommunityData>,
-    pub developer_data: Option<DeveloperData>,
-    pub public_interest_stats: PublicInterestStats,
-    pub status_updates: Vec<StatusUpdateItem>,
-    pub last_updated: Option<String>,
-    pub tickers: Option<Vec<Ticker>>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StatusUpdateItem {
     description: Option<String>,
     category: Option<String>,
@@ -133,79 +80,9 @@ pub struct Project {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct MarketData {
-    pub current_price: AllCurrencies,
-    pub total_value_locked: serde_json::Value,
-    pub mcap_to_tvl_ratio: serde_json::Value,
-    pub fdv_to_tvl_ratio: serde_json::Value,
-    ////TODO: Put RoiItem here ?
-    pub roi: serde_json::Value,
-    #[serde(flatten)]
-    pub ath: Ath,
-    #[serde(flatten)]
-    pub ath_change_percentage: AthChangePercentage,
-    #[serde(flatten)]
-    pub ath_date: AthDate,
-    #[serde(flatten)]
-    pub atl: Atl,
-    #[serde(flatten)]
-    pub atl_change_percentage: AtlChangePercentage,
-    #[serde(flatten)]
-    pub atl_date: AtlDate,
-    pub market_cap: AllCurrencies,
-    #[serde(flatten)]
-    pub market_cap_rank: serde_json::Value,
-    #[serde(flatten)]
-    pub fully_diluted_valuation: FullyDilutedValuation,
-    pub total_volume: AllCurrencies,
-    #[serde(flatten)]
-    pub high_24h: High24H,
-    #[serde(flatten)]
-    pub low_24h: Low24H,
-    pub price_change_24h: Option<f64>,
-    pub price_change_percentage_24h: Option<f64>,
-    pub price_change_percentage_7d: Option<f64>,
-    pub price_change_percentage_14d: Option<f64>,
-    pub price_change_percentage_30d: Option<f64>,
-    pub price_change_percentage_60d: Option<f64>,
-    pub price_change_percentage_200d: Option<f64>,
-    pub price_change_percentage_1y: Option<f64>,
-    pub market_cap_change_24h: Option<f64>,
-    pub market_cap_change_percentage_24h: Option<f64>,
-    #[serde(flatten)]
-    pub price_change_24h_in_currency: Option<PriceChange24HInCurrency>,
-    pub price_change_percentage_1h_in_currency: Option<AllCurrencies>,
-    pub price_change_percentage_24h_in_currency: Option<AllCurrencies>,
-    pub price_change_percentage_7d_in_currency: Option<AllCurrencies>,
-    pub price_change_percentage_14d_in_currency: Option<AllCurrencies>,
-    pub price_change_percentage_30d_in_currency: Option<AllCurrencies>,
-    pub price_change_percentage_60d_in_currency: Option<AllCurrencies>,
-    pub price_change_percentage_200d_in_currency: Option<AllCurrencies>,
-    pub price_change_percentage_1y_in_currency: Option<AllCurrencies>,
-    pub market_cap_change_24h_in_currency: Option<AllCurrencies>,
-    pub market_cap_change_percentage_24h_in_currency: Option<AllCurrencies>,
-    pub total_supply: serde_json::Value,
-    pub max_supply: serde_json::Value,
-    pub circulating_supply: serde_json::Value,
-    pub sparkline_7d: Option<Sparkline7days>,
-    pub last_updated: Option<String>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PublicInterestStats {
     pub alexa_rank: Option<f64>,
     pub bing_matches: Option<f64>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct CommunityData {
-    pub facebook_likes: Option<i64>,
-    pub twitter_followers: Option<i64>,
-    pub reddit_average_posts_48h: Option<f64>,
-    pub reddit_average_comments_48h: Option<f64>,
-    pub reddit_subscribers: Option<i64>,
-    pub reddit_accounts_active_48h: serde_json::Value,
-    pub telegram_channel_user_count: Option<Option<i64>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -218,26 +95,6 @@ pub struct RoiItem {
     pub times: Option<f64>,
     pub currency: String,
     pub percentage: Option<f64>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DeveloperData {
-    pub forks: Option<f64>,
-    pub stars: Option<f64>,
-    pub subscribers: Option<f64>,
-    pub total_issues: Option<f64>,
-    pub closed_issues: Option<f64>,
-    pub pull_requests_merged: Option<f64>,
-    pub pull_request_contributors: Option<f64>,
-    pub code_additions_deletions_4_weeks: CodeAdditionsDeletions4Weeks,
-    pub commit_count_4_weeks: Option<f64>,
-    pub last_4_weeks_commit_activity_series: Option<Vec<f64>>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct CodeAdditionsDeletions4Weeks {
-    pub additions: Option<f64>,
-    pub deletions: Option<f64>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -298,38 +155,6 @@ pub struct AssetPlatform {
     pub shortname: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
-pub struct Global {
-    active_cryptocurrencies: i64,
-    upcoming_icos: i64,
-    ongoing_icos: i64,
-    ended_icos: i64,
-    markets: i64,
-    total_market_cap: AllCurrencies,
-    total_volume: AllCurrencies,
-    market_cap_percentage: AllCurrencies,
-    market_cap_change_percentage_24h_usd: f64,
-    updated_at: i64,
-}
-
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
-pub struct GlobalData {
-    data: Global,
-}
-
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
-pub struct ExchangeRateItem {
-    name: String,
-    unit: String,
-    value: f64,
-    #[serde(rename = "type")]
-    exchange_type: Option<String>,
-}
-
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
-pub struct ExchangeRates {
-    rates: HashMap<String, ExchangeRateItem>,
-}
 /*
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Contract {

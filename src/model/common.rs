@@ -89,3 +89,39 @@ pub struct Low24H {
 pub struct PriceChange24HInCurrency {
     price_change_24h_in_currency: AllCurrencies,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct DeveloperData {
+    pub forks: Option<f64>,
+    pub stars: Option<f64>,
+    pub subscribers: Option<f64>,
+    pub total_issues: Option<f64>,
+    pub closed_issues: Option<f64>,
+    pub pull_requests_merged: Option<f64>,
+    pub pull_request_contributors: Option<f64>,
+    pub code_additions_deletions_4_weeks: CodeAdditionsDeletions4Weeks,
+    pub commit_count_4_weeks: Option<f64>,
+    pub last_4_weeks_commit_activity_series: Option<Vec<f64>>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct CommunityData {
+    pub facebook_likes: Option<i64>,
+    pub twitter_followers: Option<i64>,
+    pub reddit_average_posts_48h: Option<f64>,
+    pub reddit_average_comments_48h: Option<f64>,
+    pub reddit_subscribers: Option<i64>,
+    pub reddit_accounts_active_48h: serde_json::Value,
+    pub telegram_channel_user_count: Option<Option<i64>>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct CodeAdditionsDeletions4Weeks {
+    pub additions: Option<f64>,
+    pub deletions: Option<f64>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Ping {
+    pub gecko_says: String,
+}
