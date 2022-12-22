@@ -74,10 +74,10 @@ For handling reqwest errors reference the Docs -> https://docs.rs/reqwest/0.7.2/
 async fn main(){
     match client.coins_list().await {
         Ok(response) => {
-            dbg!("We got a response :)");
+            println!("We got a response :)");
         }
         Err(err) => {
-            dbg!("Oh no we got a 4XX Response or some other kind of reqwest error :(");
+            println!("Oh no we got a 4XX Response or some other kind of reqwest error :(");
         }
     }
 }
