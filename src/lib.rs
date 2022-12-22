@@ -19,13 +19,12 @@ mod test {
         let _ = env_logger::builder().is_test(true).try_init();
     }
 
-    #[test]
+    #[tokio::test]
     #[serial]
-    fn coins_list() {
+    async fn coins_list() {
         init();
         let client = GeckoClient::default();
-
-        let _ = tokio_test::block_on(client.coins_list()).unwrap();
+        let _ = client.coins_list().await.unwrap();
     }
 
     async fn coins_market() {
@@ -72,31 +71,35 @@ mod test {
         }
     }
 
-    #[test]
+    #[tokio::test]
     #[serial]
-    fn coins_history() {
+    async fn coins_history() {
         init();
         let client = GeckoClient::default();
 
-        let res = tokio_test::block_on(client.coins_history("bitcoin", date!(2022 - 10 - 1), None))
+        let res = client
+            .coins_history("bitcoin", date!(2022 - 10 - 1), None)
+            .await
             .unwrap();
     }
 
-    #[test]
+    #[tokio::test]
     #[serial]
-    fn coins_market_chart() {
+    async fn coins_market_chart() {
         init();
         let client = GeckoClient::default();
-        let _ =
-            tokio_test::block_on(client.coins_marketchart("bitcoin", "usd", "max", None)).unwrap();
+        let _ = client
+            .coins_marketchart("bitcoin", "usd", "max", None)
+            .await
+            .unwrap();
     }
 
-    #[test]
+    #[tokio::test]
     #[serial]
-    fn asset_platforms() {
+    async fn asset_platforms() {
         init();
         let client = GeckoClient::default();
-        let _ = tokio_test::block_on(client.assetplatforms(None)).unwrap();
+        let _ = client.assetplatforms(None).await.unwrap();
     }
 
     async fn events_countries() {
@@ -107,19 +110,19 @@ mod test {
         todo!();
     }
 
-    #[test]
+    #[tokio::test]
     #[serial]
-    fn exchange_rates() {
+    async fn exchange_rates() {
         init();
         let client = GeckoClient::default();
-        let _ = tokio_test::block_on(client.exchangerates()).unwrap();
+        let _ = client.exchangerates().await.unwrap();
     }
 
-    #[test]
+    #[tokio::test]
     #[serial]
-    fn global() {
+    async fn global() {
         init();
         let client = GeckoClient::default();
-        let _ = tokio_test::block_on(client.global()).unwrap();
+        let _ = client.global().await.unwrap();
     }
 }

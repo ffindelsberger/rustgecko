@@ -45,12 +45,10 @@ impl GeckoClient {
                 .gzip(true)
                 .default_headers(headers)
                 .build()
-                .expect("Error when building Coinmarketcap Api Client")
+                .expect("Error when building Coingecko Api Client")
         };
 
         let api_url = api_url.into();
-
-        if api_url.ends_with('/') {}
 
         GeckoClient {
             client: cl,
