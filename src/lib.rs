@@ -8,12 +8,14 @@ pub mod model;
 
 #[cfg(test)]
 mod test {
-    use crate::client::GeckoClient;
-    use crate::model::queryparams::{MarketOrder, PriceChange};
-    use serial_test::serial;
     use std::thread;
     use std::time::Duration;
+
+    use serial_test::serial;
     use time::macros::date;
+
+    use crate::client::GeckoClient;
+    use crate::model::queryparams::{MarketOrder, PriceChange};
 
     fn init() {
         let _ = env_logger::builder().is_test(true).try_init();

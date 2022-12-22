@@ -1,20 +1,25 @@
-use crate::model::apimodels::*;
-use crate::model::common::Price;
-use crate::model::queryparams::*;
+use std::collections::HashMap;
+
 use log::debug;
 use reqwest::header;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
-use std::collections::HashMap;
 use time::format_description::FormatItem;
 use time::macros::format_description;
 use time::Date;
+
+use crate::model::apimodels::*;
+use crate::model::coins::CoinsItem;
+use crate::model::common::Price;
+use crate::model::exchangerates::ExchangeRates;
+use crate::model::global::GlobalData;
+use crate::model::queryparams::*;
+use crate::model::simple::CoinListing;
 
 pub const COINGECKO_DATE_FORMAT: &[FormatItem<'_>] = format_description!("[day]-[month]-[year]");
 
 pub struct GeckoClient {
     client: reqwest::Client,
-    //TODO: maybe make this Owned String so the memory is not alive for the whole duration of the Application
     api_url: String,
 }
 
@@ -23,6 +28,8 @@ impl Default for GeckoClient {
         GeckoClient::new("https://api.coingecko.com/api/v3")
     }
 }
+
+trait Test {}
 
 impl GeckoClient {
     /// Creates a new CoinGeckoClient client with a custom host url
@@ -239,7 +246,6 @@ impl GeckoClient {
         if let Some(ids) = ids {
             params.push(("ids", ids.join("%2C")))
         }
-
         if let Some(price_change) = price_change_percentage {
             let tmp = price_change
                 .iter()
@@ -248,11 +254,9 @@ impl GeckoClient {
                 .join(",");
             params.push(("price_change", tmp));
         }
-
         if let Some(page) = page {
             params.push(("page", page.to_string()));
         }
-
         self.send_gecko_request("/coins/markets", Some(&params))
             .await
     }
