@@ -1,11 +1,13 @@
+use std::collections::HashMap;
+
+use serde::{Deserialize, Serialize};
+
 use crate::model::apimodels::{PublicInterestStats, Sparkline7days, StatusUpdateItem, Ticker};
 use crate::model::common::{
     AllCurrencies, Ath, AthChangePercentage, AthDate, Atl, AtlChangePercentage, AtlDate,
     CommunityData, Description, DeveloperData, FullyDilutedValuation, High24H, ImageItem,
     LinksItem, Localization, Low24H, PriceChange24HInCurrency,
 };
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CoinsItem {

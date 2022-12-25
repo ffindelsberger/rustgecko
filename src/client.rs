@@ -10,7 +10,7 @@ use time::Date;
 
 use crate::model::apimodels::*;
 use crate::model::coins::CoinsItem;
-use crate::model::common::Price;
+use crate::model::common::{Ping, Price};
 use crate::model::exchangerates::ExchangeRates;
 use crate::model::global::GlobalData;
 use crate::model::queryparams::*;
@@ -24,16 +24,22 @@ pub struct GeckoClient {
 }
 
 impl Default for GeckoClient {
+    /// Creates a new CoinGeckoClient client with the default Congecko Api Url
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use rustgecko::client::GeckoClient;
+    /// let client = GeckoClient::default();
+    /// ```
     fn default() -> Self {
         GeckoClient::new("https://api.coingecko.com/api/v3")
     }
 }
 
-trait Test {}
-
 impl GeckoClient {
-    /// Creates a new CoinGeckoClient client with a custom host url
-    ///
+    /// Creates a new CoinGeckoClient client with a custom host url.
+    /// The url should be supplied without a trailing slash.
     /// # Examples
     ///
     /// ```rust
@@ -55,7 +61,13 @@ impl GeckoClient {
                 .expect("Error when building Coingecko Api Client")
         };
 
-        let api_url = api_url.into();
+        let mut api_url = api_url.into();
+
+        if api_url.ends_with("/") {
+            api_url
+                .pop()
+                .expect("Tried to remove the trailing slash of the url but panicked");
+        }
 
         GeckoClient {
             client: cl,
@@ -70,8 +82,23 @@ impl GeckoClient {
     ///
     /// String or &str is the real question
     /// # Examples
+    /// ```rust
+    ///    use reqwest::header;
+    ///     use rustgecko::client::GeckoClient;
+    ///    let mut headers = header::HeaderMap::new();
     ///
+    ///    // Consider marking security-sensitive headers with `set_sensitive`.
+    ///    let mut auth_value = header::HeaderValue::from_static("secret");
+    ///    auth_value.set_sensitive(true);
+    ///    headers.insert("x-cg-pro-api-key", auth_value);
     ///
+    ///    // get a client builder
+    ///    let client = reqwest::Client::builder()
+    ///        .default_headers(headers)
+    ///        .build()?;
+    ///
+    ///    let _ = GeckoClient::new_with_custome_client(client);
+    /// ```
     pub fn new_with_custom_client(
         client: reqwest::Client,
         api_url: impl Into<String>,
@@ -120,6 +147,11 @@ impl GeckoClient {
         //response.json().await
     }
 
+    /// Check API server status
+    pub async fn ping(&self) -> Result<Ping, reqwest::Error> {
+        self.send_gecko_request("/ping", None::<&[()]>).await
+    }
+
     /// Calls the simple/supported_vs_currencies endpoint
     ///
     /// # Examples
@@ -134,6 +166,7 @@ impl GeckoClient {
             .await
     }
 
+    /// Shortcut method for [GeckoClient::simple_price]. Sets all boolean flags to true.
     pub async fn simple_price_short(
         &self,
         ids: &[&str],
@@ -153,6 +186,7 @@ impl GeckoClient {
     /// let client = GeckoClient::default();
     /// client.simple_price(&["1032"], &["usd","eur"], true, true, true ,true, "max");
     /// ```
+    #[allow(clippy::too_many_arguments)]
     pub async fn simple_price(
         &self,
         ids: &[&str],
@@ -181,6 +215,7 @@ impl GeckoClient {
         .await
     }
 
+    #[allow(clippy::too_many_arguments)]
     async fn simple_tokenprice(
         &self,
         id: &str,
@@ -215,7 +250,6 @@ impl GeckoClient {
     ///Use this to obtain all the coins' id in order to make API calls
     pub async fn coins_list(&self) -> Result<Vec<CoinListing>, reqwest::Error> {
         self.send_gecko_request("/coins/list", Some(&[("include_platform", "true")]))
-            //.execute_gecko_request("/coins/list", None::<&[()]>)
             .await
     }
 
@@ -273,7 +307,7 @@ impl GeckoClient {
     /// Ticker is_stale is true when ticker that has not been updated/unchanged from the exchange for a while.
     /// Ticker is_anomaly is true if ticker's price is outliered by our system.
     /// You are responsible for managing how you want to display these information (e.g. footnote, different background, change opacity, hide)
-    ///
+    #[allow(clippy::too_many_arguments)]
     pub async fn coins(
         &self,
         id: &str,

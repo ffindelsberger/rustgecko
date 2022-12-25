@@ -1,3 +1,4 @@
+![coingecko](https://github.com/ffindelsberger/rustgecko/actions/workflows/rust.yml/badge.svg)
 # Important
 
 This client is still in Beta, breaking changes might be introduced until the first stable release.  

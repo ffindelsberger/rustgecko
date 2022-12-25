@@ -1,5 +1,6 @@
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+
+use serde::{Deserialize, Serialize};
 
 pub type Price = HashMap<String, f64>;
 pub type Localization = HashMap<String, String>;
@@ -14,11 +15,11 @@ pub struct LinksItem {
     pub official_forum_url: Vec<Option<String>>,
     pub chat_url: Vec<Option<String>>,
     pub announcement_url: Vec<Option<String>>,
-    pub twitter_screen_name: serde_json::Value,
-    pub facebook_username: serde_json::Value,
-    pub bitcointalk_thread_identifier: serde_json::Value,
-    pub telegram_channel_identifier: serde_json::Value,
-    pub subreddit_url: serde_json::Value,
+    pub twitter_screen_name: Option<String>,
+    pub facebook_username: Option<String>,
+    pub bitcointalk_thread_identifier: Option<i64>,
+    pub telegram_channel_identifier: Option<String>,
+    pub subreddit_url: Option<String>,
     pub repos_url: ReposUrl,
 }
 
@@ -55,6 +56,7 @@ pub struct AthChangePercentage {
 pub struct AthDate {
     ath_date: HashMap<String, String>,
 }
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Atl {
     atl: AllCurrencies,

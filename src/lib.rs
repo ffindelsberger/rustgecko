@@ -11,6 +11,7 @@ mod test {
     use std::thread;
     use std::time::Duration;
 
+    use log::info;
     use serial_test::serial;
     use time::macros::date;
 
@@ -23,10 +24,20 @@ mod test {
 
     #[tokio::test]
     #[serial]
+    async fn ping() {
+        init();
+        let client = GeckoClient::default();
+        let res = client.ping().await.unwrap();
+        info!("{:#?}", res);
+    }
+
+    #[tokio::test]
+    #[serial]
     async fn coins_list() {
         init();
         let client = GeckoClient::default();
-        let _ = client.coins_list().await.unwrap();
+        let res = client.coins_list().await.unwrap();
+        info!("{:#?}", res);
     }
 
     async fn coins_market() {
@@ -83,6 +94,7 @@ mod test {
             .coins_history("bitcoin", date!(2022 - 10 - 1), None)
             .await
             .unwrap();
+        info!("{:#?}", res);
     }
 
     #[tokio::test]
@@ -90,10 +102,11 @@ mod test {
     async fn coins_market_chart() {
         init();
         let client = GeckoClient::default();
-        let _ = client
+        let res = client
             .coins_marketchart("bitcoin", "usd", "max", None)
             .await
             .unwrap();
+        info!("{:#?}", res);
     }
 
     #[tokio::test]
@@ -101,7 +114,8 @@ mod test {
     async fn asset_platforms() {
         init();
         let client = GeckoClient::default();
-        let _ = client.assetplatforms(None).await.unwrap();
+        let res = client.assetplatforms(None).await.unwrap();
+        info!("{:#?}", res);
     }
 
     async fn events_countries() {
@@ -117,7 +131,8 @@ mod test {
     async fn exchange_rates() {
         init();
         let client = GeckoClient::default();
-        let _ = client.exchangerates().await.unwrap();
+        let res = client.exchangerates().await.unwrap();
+        info!("{:#?}", res);
     }
 
     #[tokio::test]
@@ -125,6 +140,7 @@ mod test {
     async fn global() {
         init();
         let client = GeckoClient::default();
-        let _ = client.global().await.unwrap();
+        let res = client.global().await.unwrap();
+        info!("{:#?}", res);
     }
 }
