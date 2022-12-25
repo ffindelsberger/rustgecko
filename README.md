@@ -1,8 +1,4 @@
 ![coingecko](https://github.com/ffindelsberger/rustgecko/actions/workflows/rust.yml/badge.svg)
-# Important
-
-This client is still in Beta, breaking changes might be introduced until the first stable release.  
-Pull Requests and Suggestions are appreciated. 
 
 # CoinGecko API Client for Rust
 
@@ -44,7 +40,9 @@ fn main() {
     let client = GeckoClient::default();
 }
 ```
- In a Production Setting or when you have a Coingecko Subscription you might want to supply your own Client with Credentials or with any other additional configuration.
+
+In a Production Setting or when you have a Coingecko Subscription you might want to supply your own Client with
+Credentials or with any other additional configuration.
 
 ```rust
 use rustgecko::client::GeckoClient;
@@ -68,11 +66,12 @@ fn main() {
 ```
 
 ## Error Handling
+
 Every 4XX Response is turned into an error of type reqwest::Error and propagated up the call chain.  
 For handling reqwest errors reference the Docs -> https://docs.rs/reqwest/0.7.2/reqwest/struct.Error.html
 
 ```rust
-async fn main(){
+async fn main() {
     match client.coins_list().await {
         Ok(response) => {
             println!("We got a response :)");
