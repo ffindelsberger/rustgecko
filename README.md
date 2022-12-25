@@ -59,9 +59,10 @@ fn main() {
     // get a client builder
     let client = reqwest::Client::builder()
         .default_headers(headers)
-        .build()?;
+        .build()
+        .unwrap();
 
-    let _ = GeckoClient::new_with_custome_client(client);
+    let _ = GeckoClient::new_with_custom_client(client, "https://some.url");
 }
 ```
 

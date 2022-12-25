@@ -84,7 +84,7 @@ impl GeckoClient {
     /// # Examples
     /// ```rust
     ///    use reqwest::header;
-    ///     use rustgecko::client::GeckoClient;
+    ///  use rustgecko::client::GeckoClient;
     ///    let mut headers = header::HeaderMap::new();
     ///
     ///    // Consider marking security-sensitive headers with `set_sensitive`.
@@ -95,9 +95,10 @@ impl GeckoClient {
     ///    // get a client builder
     ///    let client = reqwest::Client::builder()
     ///        .default_headers(headers)
-    ///        .build()?;
+    ///        .build()
+    ///        .unwrap();
     ///
-    ///    let _ = GeckoClient::new_with_custome_client(client);
+    ///    let _ = GeckoClient::new_with_custom_client(client, "https://some.url");
     /// ```
     pub fn new_with_custom_client(
         client: reqwest::Client,
