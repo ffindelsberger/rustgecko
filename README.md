@@ -1,5 +1,7 @@
 ![coingecko](https://github.com/ffindelsberger/rustgecko/actions/workflows/rust.yml/badge.svg)
 
+Pull Requests and Suggestions for Improvements are highly welcomed and appreciated
+
 # CoinGecko API Client for Rust
 
 Simple API Client for CoinGecko written in Rust
