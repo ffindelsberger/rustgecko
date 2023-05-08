@@ -28,6 +28,13 @@ Simple API Client for CoinGecko written in Rust
 More api Endpoints than listed here will be supported in the Future. As soon as I start working on additional Endpoints
 the Table will be updated.
 
+## rustls and OpenSSL/native-tls
+By Default this Crate uses the rustls backend of reqwest, if you need native-tls/openSSL you need to activate the 
+native-tls feature 
+```toml
+rustgecko = { version = "*" , features = ["native-tls"] }
+```
+
 ## Shortcut Methods
 
 Some Methods with a lot of boolean Flags have a shorter Version i.E "simple_price_short" for if you just want to
