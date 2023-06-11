@@ -11,3 +11,5 @@ pub struct CoinListing {
     pub name: String,
     pub platforms: Option<HashMap<String, Option<String>>>,
 }
+
+pub type ContractAddress = String;

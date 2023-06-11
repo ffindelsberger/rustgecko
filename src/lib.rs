@@ -143,4 +143,26 @@ mod test {
         let res = client.global().await.unwrap();
         info!("{:#?}", res);
     }
+    #[tokio::test]
+    #[serial]
+    async fn token_price() {
+        init();
+        let client = GeckoClient::default();
+        let res = client
+            .simple_token_price(
+                "ethereum",
+                &["usd", "eur"],
+                &[
+                    "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+                    "0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c",
+                ],
+                true,
+                true,
+                true,
+                true,
+                "full",
+            )
+            .await;
+        info!("{:#?}", res);
+    }
 }

@@ -14,7 +14,7 @@ use crate::model::common::{Ping, Price};
 use crate::model::exchangerates::ExchangeRates;
 use crate::model::global::GlobalData;
 use crate::model::queryparams::*;
-use crate::model::simple::CoinListing;
+use crate::model::simple::{CoinListing, ContractAddress};
 
 pub const COINGECKO_DATE_FORMAT: &[FormatItem<'_>] = format_description!("[day]-[month]-[year]");
 
@@ -84,7 +84,7 @@ impl GeckoClient {
     /// # Examples
     /// ```rust
     ///    use reqwest::header;
-    ///  use rustgecko::client::GeckoClient;
+    ///    use rustgecko::client::GeckoClient;
     ///    let mut headers = header::HeaderMap::new();
     ///
     ///    // Consider marking security-sensitive headers with `set_sensitive`.
@@ -215,11 +215,20 @@ impl GeckoClient {
         )
         .await
     }
-
+    /// Calls the simple/price/{id} endpoint
+    /// The supported Currencies can be retrieved via the simple/supported_vs_currencies endpoint
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use rustgecko::client::GeckoClient;
+    /// let client = GeckoClient::default();
+    /// client.simple_price(&["1032"], &["usd","eur"], true, true, true ,true, "max");
+    /// ```
     #[allow(clippy::too_many_arguments)]
-    async fn simple_tokenprice(
+    async fn simple_price_id(
         &self,
-        id: &str,
+        ids: &[&str],
         vs_currencies: &[&str],
         contract_addresses: &[&str],
         include_market_cap: bool,
@@ -227,12 +236,12 @@ impl GeckoClient {
         include_24hr_change: bool,
         include_last_updated_at: bool,
         precision: &str,
-    ) -> Result<CoinListing, reqwest::Error> {
-        //TODO: Test endpoint and set correct return type, this does not give a coinlisting
+    ) -> Result<HashMap<String, Price>, reqwest::Error> {
         self.send_gecko_request(
             "/simple/price",
             Some(&[
-                ("id", id.to_string()),
+                ("ids", ids.join("%2C")),
+                ("contract_addresses", contract_addresses.join("%2C")),
                 ("vs_currencies", vs_currencies.join("%2C")),
                 ("include_market_cap", include_market_cap.to_string()),
                 ("include_24hr_change", include_24hr_change.to_string()),
@@ -242,7 +251,79 @@ impl GeckoClient {
                     include_last_updated_at.to_string(),
                 ),
                 ("precision", precision.to_string()),
-                ("contract_addresses", contract_addresses.join("%2C")),
+            ]),
+        )
+        .await
+    }
+
+    pub async fn simple_token_price_short(
+        &self,
+        id: &str,
+        vs_currencies: &[&str],
+        contract_addresses: &[&str],
+    ) -> Result<HashMap<ContractAddress, Price>, reqwest::Error> {
+        self.simple_token_price(
+            id,
+            vs_currencies,
+            contract_addresses,
+            true,
+            true,
+            true,
+            true,
+            "full",
+        )
+        .await
+    }
+
+    /// Calls the simple/token_price/{id} endpoint
+    /// Get current price of tokens (using contract addresses) for a given platform in any other currency that you need.
+    /// # Examples
+    ///
+    /// ```rust
+    /// use rustgecko::client::GeckoClient;
+    /// let client = GeckoClient::default();
+    /// let res = client
+    ///             .simple_token_price(
+    ///                 "ethereum",
+    ///                 &["usd", "eur"],
+    ///                 &[
+    ///                     "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+    ///                     "0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c",
+    ///                 ],
+    ///                 false,
+    ///                 false,
+    ///                 false,
+    ///                 false,
+    ///                 "full",
+    ///             );
+    /// ```
+    #[allow(clippy::too_many_arguments)]
+    pub async fn simple_token_price(
+        &self,
+        id: &str,
+        vs_currencies: &[&str],
+        contract_addresses: &[&str],
+        include_market_cap: bool,
+        include_24hr_vol: bool,
+        include_24hr_change: bool,
+        include_last_updated_at: bool,
+        precision: &str,
+    ) -> Result<HashMap<ContractAddress, Price>, reqwest::Error> {
+        let url = format!("/simple/token_price/{}", id);
+        self.send_gecko_request(
+            &url,
+            Some(&[
+                ("id", id.to_string()),
+                ("vs_currencies", vs_currencies.join(",")),
+                ("include_market_cap", include_market_cap.to_string()),
+                ("include_24hr_change", include_24hr_change.to_string()),
+                ("include_24hr_vol", include_24hr_vol.to_string()),
+                (
+                    "include_last_updated_at",
+                    include_last_updated_at.to_string(),
+                ),
+                ("precision", precision.to_string()),
+                ("contract_addresses", contract_addresses.join(",")),
             ]),
         )
         .await
