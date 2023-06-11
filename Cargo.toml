@@ -1,7 +1,7 @@
 [package]
 authors = ["Florian Findelsberger"]
 name = "rustgecko"
-version = "0.3.0"
+version = "0.3.1"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "A Simple SDK for Coingecko API"
