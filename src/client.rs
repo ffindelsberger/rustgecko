@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use log::debug;
 use reqwest::header;
+pub use reqwest::Error;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use time::format_description::FormatItem;
