@@ -313,7 +313,6 @@ impl GeckoClient {
         self.send_gecko_request(
             &url,
             Some(&[
-                ("id", id.to_string()),
                 ("vs_currencies", vs_currencies.join(",")),
                 ("include_market_cap", include_market_cap.to_string()),
                 ("include_24hr_change", include_24hr_change.to_string()),
