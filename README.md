@@ -82,12 +82,11 @@ For handling reqwest errors reference the Docs -> https://docs.rs/reqwest/0.7.2/
 
 ```rust
 async fn main() {
-    match client.coins_list().await {
-        Ok(response) => {
-            println!("We got a response :)");
-        }
-        Err(err) => {
-            println!("Oh no we got a 4XX Response or some other kind of reqwest error :(");
+    if let Err(err) = GeckoClient::default().exchangerates().await {
+        match err.status() {
+            Some(StatusCode::TOO_MANY_REQUESTS) => info!("we have to slow down"),
+            Some(_) => info!("Something else happened"),
+            None => info!("We got an error without a status code"),
         }
     }
 }
