@@ -56,7 +56,6 @@ impl GeckoClient {
             );
 
             reqwest::Client::builder()
-                .gzip(true)
                 .default_headers(headers)
                 .build()
                 .expect("Error when building Coingecko Api Client")
