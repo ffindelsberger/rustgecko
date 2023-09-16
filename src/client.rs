@@ -52,7 +52,7 @@ impl GeckoClient {
             let mut headers = header::HeaderMap::new();
             headers.insert(
                 "Accept-Encoding",
-                header::HeaderValue::from_static("deflate, gzip"),
+                header::HeaderValue::from_static("deflate"),
             );
 
             reqwest::Client::builder()
@@ -142,7 +142,10 @@ impl GeckoClient {
         match result {
             Ok(res) => Ok(res),
             Err(err) => {
-                panic!("{}", err.to_string());
+                panic!(
+                    "Failed to Deserialize response from Coingecko into Json with Error : {}",
+                    err.to_string()
+                );
             }
         }
         //response.json().await
